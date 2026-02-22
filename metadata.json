@@ -1,0 +1,8 @@
+{
+  "name": "TalentHire AI Enterprise",
+  "description": "Production-grade Enterprise AI Talent Platform with ATS, AI Screening, Video Interviews, and ML Ranking.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
