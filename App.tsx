@@ -20,7 +20,8 @@ import {
   Calendar,
   AlertTriangle,
   ArrowRight,
-  X
+  X,
+  Download
 } from 'lucide-react';
 
 import DashboardView from './components/Dashboard';
@@ -55,6 +56,26 @@ const Sidebar = () => {
   const handleLogout = () => {
     removeAuthToken();
     window.location.hash = '/login';
+  };
+
+  const handleDownloadProject = async () => {
+    try {
+      const response = await fetch('/api/v1/system/download-project');
+      if (!response.ok) throw new Error('Download failed');
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `talenthire-ai-project-${new Date().toISOString().split('T')[0]}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error(error);
+      alert('Failed to download project. Please try again.');
+    }
   };
 
   return (
@@ -105,13 +126,22 @@ const Sidebar = () => {
             <p className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">Admin</p>
           </div>
         </div>
-        <button 
-          onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-black bg-slate-800 hover:bg-rose-900/20 hover:text-rose-400 text-slate-400 rounded-xl transition-all border border-slate-700 hover:border-rose-900/50"
-        >
-          <LogOut size={14} />
-          SYSTEM LOGOUT
-        </button>
+        <div className="space-y-2">
+          <button 
+            onClick={handleDownloadProject}
+            className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-black bg-indigo-600/10 hover:bg-indigo-600/20 text-indigo-400 rounded-xl transition-all border border-indigo-600/20 hover:border-indigo-600/40"
+          >
+            <Download size={14} />
+            DOWNLOAD PROJECT
+          </button>
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-black bg-slate-800 hover:bg-rose-900/20 hover:text-rose-400 text-slate-400 rounded-xl transition-all border border-slate-700 hover:border-rose-900/50"
+          >
+            <LogOut size={14} />
+            SYSTEM LOGOUT
+          </button>
+        </div>
       </div>
     </div>
   );

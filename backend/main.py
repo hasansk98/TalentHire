@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from backend.core.config import settings
 from backend.api import deps
-from backend.api.v1 import auth, jobs, candidates, resumes, public, billing, interviews
+from backend.api.v1 import auth, jobs, candidates, resumes, public, billing, interviews, system
 import time
 import logging
 
@@ -39,6 +39,7 @@ app.include_router(resumes.router, prefix=f"{settings.API_V1_STR}/resumes", tags
 app.include_router(public.router, prefix=f"{settings.API_V1_STR}/public", tags=["public"])
 app.include_router(billing.router, prefix=f"{settings.API_V1_STR}/billing", tags=["billing"])
 app.include_router(interviews.router, prefix=f"{settings.API_V1_STR}/interviews", tags=["interviews"])
+app.include_router(system.router, prefix=f"{settings.API_V1_STR}/system", tags=["system"])
 
 @app.get("/health")
 def health_check(db: Session = Depends(deps.get_db)):
